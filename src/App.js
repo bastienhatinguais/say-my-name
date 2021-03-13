@@ -39,9 +39,9 @@ export default function App() {
 
   return (
     <Router>
-      <AppBar position="static">
+      <AppBar position="static" style={{background: "white", color: "#FFA600"}}>
         <Toolbar>
-          <Link to="/" style={{ textDecoration: "none", color: "white" }}>
+          <Link to="/" style={{ textDecoration: "none", color: "#FFA600" }}>
             <IconButton
               edge="start"
               className={classes.menuButton}
@@ -73,6 +73,8 @@ export default function App() {
         </Toolbar>
       </AppBar>
 
+    
+      <img style={{position: 'absolute', right:0, width: "auto", height:"90vh", zIndex: "-1"}}src="img/question.jpg" alt="Question" />
       <Switch>
         <Route path="/fini">
           <FiniScreen></FiniScreen>

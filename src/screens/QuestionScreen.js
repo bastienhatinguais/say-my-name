@@ -18,7 +18,7 @@ export default function QuestionScreen(props) {
 
     setCitation(gameManager.citationActuelle);
     setQuestion(gameManager.questionActuelle);
-    setPropositions(gameManager.questionActuelle.propositions);
+    setPropositions(gameManager.questionActuelle.propositions || []);
     setReponse(gameManager.questionActuelle.reponse);
   }, []);
 
@@ -26,8 +26,7 @@ export default function QuestionScreen(props) {
     console.log("ptdr");
     return <FiniScreen message="Aucune partie en cours."></FiniScreen>;
   } else if (redirect) {
-    console.log("redirected");
-    //return <Redirect to="/fini" />;
+    return <Redirect to="/fini" />;
   } else {
     return (
       <>
@@ -37,7 +36,7 @@ export default function QuestionScreen(props) {
           label={gameManager.score}
           style={{ position: "fixed", right: 10, top: 80 }}
         />
-        <Grid container direction="column" justify="center" alignItems="center">
+        <Grid container direction="column" justify="center" alignItems="center" style={{color:"white"}}>
           <h2> Citation : {citation.citation}</h2>
           <p>{question.question}</p>
           <Grid
@@ -47,10 +46,11 @@ export default function QuestionScreen(props) {
             alignItems="center"
             style={{ gap: 15 }}
           >
-            {propositions.map((proposition, index) => {
+            {
+            propositions.map((proposition, index) => {
               let classButton = "proposition";
               if (repondu) {
-                classButton = index === reponse ? "juste" : "faux";
+                classButton = index === reponse-1 ? "juste" : "faux";
               }
               return (
                 <Button
@@ -58,7 +58,8 @@ export default function QuestionScreen(props) {
                   size="large"
                   key={index}
                   onClick={() => {
-                    if (index === reponse) {
+                    console.log(index, reponse);
+                    if (index == reponse-1) {
                       gameManager.score += gameManager.questionActuelle.score;
                     }
 

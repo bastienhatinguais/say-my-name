@@ -14,9 +14,11 @@ export default function CommencerScreen() {
       direction="row"
       justify="center"
       alignItems="center"
-      style={{ height: "60vh" }}
+      style={{ height: "60vh"}}
     >
       <Button
+      size="large"
+        style={{color:"white", fontSize: "50px"}}
         onClick={() => {
           gameManager.commencer().then((res) => {
             console.log(

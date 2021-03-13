@@ -5,24 +5,34 @@
 
 body {
   margin: 0px !important;
-  background-color: whitesmoke;
+  background-color: #FFA600;
   font-family: sans-serif;
 }
 
 .proposition {
-  border: solid grey 2px;
-  color: white;
-  background-color: darkgray;
+  border: solid grey 2px !important;
+  color: grey !important;;
+  background-color: white !important;;
+  width: 300px;
 }
 
 .juste {
-  background-color: green;
-  border: lightgray;
-  color: white;
+  
+  background-color: rgb(84, 224, 84) !important;
+  border: white solid 1px !important;
+  color: white !important;
+  width: 300px;
+  transition: 1s;
 }
 
 .faux {
-  background-color: red;
-  border: lightgray;
-  color: white;
+  background-color: rgb(194, 74, 74) !important;
+  border: white solid 1px !important;
+  color: white !important;
+  width: 300px;
+
+}
+
+.jouer:hover{
+  color: white
 }

@@ -54,10 +54,10 @@ export default class GameManager {
       console.log(v);
       this.enJeu = true;
 
-      console.log(this.citations);
       if (this.citations.length > 0) {
         this.citationActuelle = this.citations[0];
         this.questionActuelle = this.citationActuelle.questions[0];
+        console.log(this.questions);
       } else {
         console.log("quittage");
         //this.quitter();
@@ -108,11 +108,11 @@ export default class GameManager {
         let questions = [...dataJSON];
         let citation = questions.shift();
 
-        questions.map((question) => {
+        questions = questions.map((question) => {
           return new Question(
             question.question,
-            question.reponse,
-            question.difficulte,
+            parseInt(question.reponse, 10),
+            parseInt(question.difficulte, 10),
             question.indice,
             [
               question.proposition_1,
