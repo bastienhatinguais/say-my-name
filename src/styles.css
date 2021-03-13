@@ -1,0 +1,28 @@
+.App {
+  font-family: sans-serif;
+  text-align: center;
+}
+
+body {
+  margin: 0px !important;
+  background-color: whitesmoke;
+  font-family: sans-serif;
+}
+
+.proposition {
+  border: solid grey 2px;
+  color: white;
+  background-color: darkgray;
+}
+
+.juste {
+  background-color: green;
+  border: lightgray;
+  color: white;
+}
+
+.faux {
+  background-color: red;
+  border: lightgray;
+  color: white;
+}
