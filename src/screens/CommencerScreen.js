@@ -1,9 +1,9 @@
-import { Button, Grid } from "@material-ui/core";
+import { Button, Grid, Icon } from "@material-ui/core";
 import React, { useState } from "react";
 import { gameManager } from "../gm";
 import { Redirect } from "react-router-dom";
 import CircularProgress from '@material-ui/core/CircularProgress';
-
+import InfoIcon from '@material-ui/icons/Info';
 
 export default function CommencerScreen() {
   const [redirect, setRedirect] = useState(false);
@@ -22,7 +22,7 @@ export default function CommencerScreen() {
   return (
     <Grid
       container
-      direction="row"
+      direction="column"
       justify="center"
       alignItems="center"
       style={{ height: "60vh" }}
@@ -32,9 +32,6 @@ export default function CommencerScreen() {
         style={{ color: "white", fontSize: "50px" }}
         onClick={() => {
           gameManager.commencer().then((res) => {
-            console.log(
-              "avant de redirect " + gameManager.citationActuelle.citation
-            );
             setRedirect(true);
           });
           setInProgress(true);
@@ -42,6 +39,7 @@ export default function CommencerScreen() {
       >
         Commencer
       </Button>
+      <p style={{color:"white", fontSize:"1.2em"}}><InfoIcon/> Après avoir appuyé sur le bouton "commencer", la partie débutera et vous disposerez de 15 secondes par question. Bonne chance !</p>
     </Grid>
   );
 }

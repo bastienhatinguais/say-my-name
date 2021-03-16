@@ -1,5 +1,7 @@
 import Question from "./question";
 import Citation from "./citation";
+import { Timer } from 'easytimer.js';
+
 
 export default class GameManager {
   constructor() {
@@ -11,6 +13,7 @@ export default class GameManager {
     //citation traitée
     this.citationActuelle = new Citation();
     this.enJeu = false;
+    this.timer = new Timer();
   }
 
   /** Commence la partie
@@ -20,47 +23,16 @@ export default class GameManager {
   async commencer(nbrCitation = 2) {
     //récupérer les citations dans la base de donnée
 
-    //(local)
-    /*
-    let questions = [];
-    questions.push(
-      new Question(
-        "Quel est le personnage qui a dit cette phrase ?",
-        0,
-        2,
-        "Chauve - Chapeau",
-        [
-          "Walter White",
-          "Jesse Pinkman",
-          "Gustavo 'Gus' Fring",
-          "Jane Margolis"
-        ]
-      )
-    );
-
-    questions.push(
-      new Question("Quel est la série", 2, 2, "BB", [
-        "Oui",
-        "Non",
-        "Breaking Bad",
-        "je sais plus"
-      ])
-    );
-
-    this.ajouterCitation(new Citation(questions, "Say my name"));
-*/
-
     let ok = this.getCitation().then((v) => {
-      console.log(v);
       this.enJeu = true;
 
       if (this.citations.length > 0) {
         this.citationActuelle = this.citations[0];
         this.questionActuelle = this.citationActuelle.questions[0];
-        console.log(this.questions);
+        console.log("commencer start timer")
+        this.timer.start({countdown: true, startValues: {seconds: 15}});
       } else {
-        console.log("quittage");
-        //this.quitter();
+        this.quitter();
       }
     });
     return ok;
@@ -76,6 +48,8 @@ export default class GameManager {
     this.citations = [];
     this.score = 0;
     this.enJeu = false;
+    this.timer.stop();
+    console.log("quitter")
   }
 
   /** Ajoute une citation
@@ -89,7 +63,6 @@ export default class GameManager {
   questionSuivante() {
     let question = this.citationActuelle.questionSuivante();
     if (question === false) {
-      console.log("Changement de enJeu");
       this.enJeu = false;
     } else {
       this.questionActuelle = question;

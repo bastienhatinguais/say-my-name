@@ -1,16 +1,15 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import Menu from "./components/menu";
 import QuestionScreen from "./screens/QuestionScreen";
 import CommencerScreen from "./screens/CommencerScreen";
-import { gameManager } from "./gm";
 import FiniScreen from "./screens/FiniScreen";
 import {
   AppBar,
   Toolbar,
-  Button,
   Typography,
-  IconButton
+  IconButton,
+  Menu,
+  MenuItem
 } from "@material-ui/core";
 import HomeIcon from "@material-ui/icons/Home";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
@@ -20,6 +19,10 @@ import ConnexionScreen from "./screens/ConnexionScreen";
 import { AuthContext } from "./context/auth";
 import { withStyles } from '@material-ui/styles';
 import InscriptionScreen from "./screens/InscriptionScreen";
+import AdministrateurQuestionScreen from "./screens/AdministrateurQuestionScreen";
+import AdministrateurCitationScreen from "./screens/AministrateurCitationScreen";
+import AdministrateurScreen from "./screens/AdministrateurScreen";
+import PrivateRoute from "./components/privateRoute";
 
 
 
@@ -39,7 +42,9 @@ class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      authToken: null
+      authToken: null,
+      admin: false,
+      anchor: null,
     };
   }
 
@@ -50,12 +55,25 @@ class App extends React.Component {
     });
   };
 
+  setAdmin = (data) => {
+    this.setState({
+      admin: data
+    });
+  };
+
   deleteAuthToken = () => {
     this.setState({
       authToken: null
     });
   };
 
+  handleClickMenu = (event) => {
+    this.setState({ anchor: event.currentTarget })
+  };
+
+  handleCloseMenu = () => {
+    this.setState({ anchor: null })
+  };
 
   render() {
     const { classes } = this.props;
@@ -63,7 +81,9 @@ class App extends React.Component {
       <AuthContext.Provider
         value={{
           authToken: this.state.authToken,
-          setAuthToken: this.setAuthToken
+          admin: this.state.admin,
+          setAuthToken: this.setAuthToken,
+          setAdmin: this.setAdmin
         }}
       >
 
@@ -80,17 +100,43 @@ class App extends React.Component {
                   <HomeIcon />
                 </IconButton>
               </Link>
-              <Typography variant="h6" className={classes.title}>
-                Say My Name !
-          </Typography>
-              <IconButton
-                edge="start"
-                className={classes.menuButton}
-                color="inherit"
-                aria-label="menu"
-              >
-                <AccountCircleIcon />
-              </IconButton>
+              <Link to="/" style={{ textDecoration: "none" }}>
+
+                <img style={{ objectFit: "content", maxHeight: "50px", width: "auto" }} src="img/logo_say_my_name_2.png" alt="logo" />
+              </Link>
+              <div style={{ marginLeft: "auto" }}
+              ></div>
+              {this.state.authToken ?
+                <>
+                  <IconButton
+                    edge="end"
+                    className={classes.menuButton}
+                    color="inherit"
+                    aria-label="menu"
+                    aria-controls="simple-menu"
+                    aria-haspopup="true"
+                    onClick={this.handleClickMenu}
+                    style={{ marginLeft: "auto" }}
+                  >
+                    <AccountCircleIcon />
+                  </IconButton>
+                  <Menu
+                    id="simple-menu"
+                    anchorEl={this.state.anchor}
+                    keepMounted
+                    open={Boolean(this.state.anchor)}
+                    onClose={this.handleCloseMenu}
+                    style={{ paddingTop: "30px" }}
+                  >
+                    <MenuItem onClick={this.handleCloseMenu}>Mon compte</MenuItem>
+                    <MenuItem onClick={() => {
+                      this.handleCloseMenu();
+                      console.log(this.state.authToken)
+                      this.deleteAuthToken();
+                      this.setAdmin(false);
+                    }}>Déconnexion</MenuItem>
+                  </Menu> </> : <></>
+              }
               <IconButton
                 edge="start"
                 className={classes.menuButton}
@@ -105,27 +151,27 @@ class App extends React.Component {
 
           <img style={{ position: 'absolute', right: 0, width: "auto", height: "90vh", zIndex: "-1" }} src="img/question.jpg" alt="Question" />
           <Switch>
-            <Route path="/fini">
-              <FiniScreen></FiniScreen>
+            <PrivateRoute path="/administrateur_question" component={AdministrateurQuestionScreen}>
+            </PrivateRoute>
+            <PrivateRoute path="/administrateur_citation" component={AdministrateurCitationScreen}>
+            </PrivateRoute>
+            <PrivateRoute path="/administrateur" component={AdministrateurScreen}>
+            </PrivateRoute>
+            <PrivateRoute path="/fini" component={FiniScreen}>
+            </PrivateRoute>
+            <PrivateRoute path="/enjeu" component={QuestionScreen}>
+            </PrivateRoute>
+            <PrivateRoute path="/jouer" component={CommencerScreen}>
+            </PrivateRoute>
+            <Route path="/inscription" component={InscriptionScreen}>
             </Route>
-            <Route path="/enjeu">
-              <QuestionScreen></QuestionScreen>
+            <Route path="/connexion" component={ConnexionScreen}>
             </Route>
-            <Route path="/jouer">
-              <CommencerScreen></CommencerScreen>
-            </Route>
-            <Route path="/inscription">
-              <InscriptionScreen></InscriptionScreen>
-            </Route>
-            <Route path="/connexion">
-              <ConnexionScreen></ConnexionScreen>
-            </Route>
-            <Route path="/index">
-              <Accueil></Accueil>
-            </Route>
-            <Route path="/">
-              <Accueil></Accueil>
-            </Route>
+            <PrivateRoute path="/index" component={Accueil}>
+            </PrivateRoute>
+            <PrivateRoute path="/" component={Accueil}>
+            </PrivateRoute>
+
           </Switch>
         </Router>
       </AuthContext.Provider>

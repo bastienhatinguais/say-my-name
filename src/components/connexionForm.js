@@ -6,12 +6,14 @@ import {
     InputLabel,
     Input,
     InputAdornment,
-    IconButton, Grid,
-    Typography
+    IconButton,
+    Typography,
+    Grid,
+    CircularProgress
 } from "@material-ui/core";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import EmailIcon from "@material-ui/icons/Email";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { AuthContext } from "../context/auth";
 
 class ConnexionForm extends React.Component {
@@ -22,7 +24,9 @@ class ConnexionForm extends React.Component {
         this.state = {
             email: "",
             password: "",
-            showPassword: false
+            showPassword: false,
+            inProgress: false,
+            redirect: false
         };
     }
 
@@ -30,10 +34,12 @@ class ConnexionForm extends React.Component {
         event.preventDefault();
         if (this.state.email !== "" && this.state.password !== "") {
             this.connexion(this.state.email, this.state.password).then((data) => {
-                console.log(data);
-                this.context.setAuthToken(data);
+                this.context.setAuthToken(data.id);
+                this.context.setAdmin(data.admin);
+                this.setState({redirect: true});
             });
         }
+        this.setState({inProgress: true})
     };
 
     handleChange = (prop) => (event) => {
@@ -62,6 +68,19 @@ class ConnexionForm extends React.Component {
     }
 
     render() {
+        if(this.state.redirect){
+            return <Redirect to="/" />
+
+        }
+        if (this.state.inProgress) {
+            return <Grid
+                container
+                direction="row"
+                justify="center"
+                alignItems="center"
+                style={{ height: "60vh" }}
+            ><CircularProgress style={{ color: "white" }} /></Grid>
+        }
         return (
             <Box
                 display="flex"
@@ -73,7 +92,7 @@ class ConnexionForm extends React.Component {
                 style={{ marginLeft: "auto", marginRight: "auto", marginTop: "20", backgroundColor: "white" }}
 
             >
-        <Typography align="center" variant="h3" style={{ color: "#FFA600" }}>CONNEXION</Typography>
+                <Typography align="center" variant="h3" style={{ color: "#FFA600" }}>CONNEXION</Typography>
                 <form onSubmit={this.handleSubmit}>
                     <FormControl fullWidth>
                         <label>
@@ -109,8 +128,8 @@ class ConnexionForm extends React.Component {
                                             {this.state.showPassword ? (
                                                 <Visibility />
                                             ) : (
-                                                    <VisibilityOff />
-                                                )}
+                                                <VisibilityOff />
+                                            )}
                                         </IconButton>
                                     </InputAdornment>
                                 }

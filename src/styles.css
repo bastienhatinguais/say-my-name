@@ -10,10 +10,10 @@ body {
 }
 
 .proposition {
-  border: solid grey 2px !important;
-  color: grey !important;;
-  background-color: white !important;;
+  color: white !important;
+  background-color:#383838 !important;
   width: 300px;
+
 }
 
 .juste {
